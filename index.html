@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-wallet"></i> Expense Tracker</h1>
+            <p class="tagline">Track your spending, manage your budget</p>
+        </header>
+        
+        <main>
+            <section class="summary-section">
+                <div class="summary-card">
+                    <h2>Total Expenses</h2>
+                    <p id="total-amount" class="total-amount">$0.00</p>
+                </div>
+                <div class="summary-card">
+                    <h2>This Month</h2>
+                    <p id="month-amount" class="month-amount">$0.00</p>
+                </div>
+                <div class="summary-card">
+                    <h2>Average Per Day</h2>
+                    <p id="average-amount" class="average-amount">$0.00</p>
+                </div>
+            </section>
+
+            <section class="add-expense-section">
+                <h2><i class="fas fa-plus-circle"></i> Add New Expense</h2>
+                <form id="expense-form" class="expense-form">
+                    <div class="form-group">
+                        <label for="expense-name">Expense Name</label>
+                        <input type="text" id="expense-name" placeholder="Enter expense name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="expense-amount">Amount ($)</label>
+                        <input type="number" id="expense-amount" placeholder="Enter amount" step="0.01" min="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="expense-category">Category</label>
+                        <select id="expense-category" required>
+                            <option value="" disabled selected>Select category</option>
+                            <option value="food">Food & Groceries</option>
+                            <option value="transportation">Transportation</option>
+                            <option value="housing">Housing & Rent</option>
+                            <option value="utilities">Utilities</option>
+                            <option value="entertainment">Entertainment</option>
+                            <option value="healthcare">Healthcare</option>
+                            <option value="education">Education</option>
+                            <option value="shopping">Shopping</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="expense-date">Date</label>
+                        <input type="date" id="expense-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="expense-notes">Notes (Optional)</label>
+                        <textarea id="expense-notes" placeholder="Add any additional notes"></textarea>
+                    </div>
+                    <button type="submit" class="btn-add"><i class="fas fa-plus"></i> Add Expense</button>
+                </form>
+            </section>
+
+            <section class="expenses-list-section">
+                <div class="expenses-header">
+                    <h2><i class="fas fa-list"></i> Expense History</h2>
+                    <div class="filter-controls">
+                        <div class="search-container">
+                            <input type="text" id="search-expense" placeholder="Search expenses...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="filter-container">
+                            <select id="filter-category">
+                                <option value="all">All Categories</option>
+                                <option value="food">Food & Groceries</option>
+                                <option value="transportation">Transportation</option>
+                                <option value="housing">Housing & Rent</option>
+                                <option value="utilities">Utilities</option>
+                                <option value="entertainment">Entertainment</option>
+                                <option value="healthcare">Healthcare</option>
+                                <option value="education">Education</option>
+                                <option value="shopping">Shopping</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <select id="sort-by">
+                                <option value="date-desc">Date (Newest First)</option>
+                                <option value="date-asc">Date (Oldest First)</option>
+                                <option value="amount-desc">Amount (Highest First)</option>
+                                <option value="amount-asc">Amount (Lowest First)</option>
+                                <option value="name-asc">Name (A-Z)</option>
+                                <option value="name-desc">Name (Z-A)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="expenses-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="expenses-table-body">
+                            <!-- Expense rows will be added here by JavaScript -->
+                            <tr class="no-expenses-row">
+                                <td colspan="5" class="no-expenses-message">No expenses added yet. Add your first expense above!</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination-container">
+                    <button id="prev-page" class="pagination-btn" disabled><i class="fas fa-chevron-left"></i> Previous</button>
+                    <span id="page-info">Page 1 of 1</span>
+                    <button id="next-page" class="pagination-btn" disabled>Next <i class="fas fa-chevron-right"></i></button>
+                </div>
+            </section>
+
+            <!-- Edit Expense Modal -->
+            <div id="edit-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h2>Edit Expense</h2>
+                    <form id="edit-expense-form">
+                        <input type="hidden" id="edit-expense-id">
+                        <div class="form-group">
+                            <label for="edit-expense-name">Expense Name</label>
+                            <input type="text" id="edit-expense-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-expense-amount">Amount ($)</label>
+                            <input type="number" id="edit-expense-amount" step="0.01" min="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-expense-category">Category</label>
+                            <select id="edit-expense-category" required>
+                                <option value="food">Food & Groceries</option>
+                                <option value="transportation">Transportation</option>
+                                <option value="housing">Housing & Rent</option>
+                                <option value="utilities">Utilities</option>
+                                <option value="entertainment">Entertainment</option>
+                                <option value="healthcare">Healthcare</option>
+                                <option value="education">Education</option>
+                                <option value="shopping">Shopping</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-expense-date">Date</label>
+                            <input type="date" id="edit-expense-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-expense-notes">Notes (Optional)</label>
+                            <textarea id="edit-expense-notes"></textarea>
+                        </div>
+                        <div class="modal-buttons">
+                            <button type="button" class="btn-cancel">Cancel</button>
+                            <button type="submit" class="btn-save">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Delete Confirmation Modal -->
+            <div id="delete-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h2>Confirm Delete</h2>
+                    <p>Are you sure you want to delete this expense? This action cannot be undone.</p>
+                    <input type="hidden" id="delete-expense-id">
+                    <div class="modal-buttons">
+                        <button type="button" class="btn-cancel">Cancel</button>
+                        <button type="button" class="btn-delete-confirm">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Expense Tracker | <a href="#" id="clear-data">Reset All Data</a></p>
+        </footer>
+    </div>
+
+    <div id="notification" class="notification">
+        <span id="notification-message"></span>
+        <span class="notification-close">&times;</span>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

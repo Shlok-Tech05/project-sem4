@@ -446,6 +446,7 @@ function getCategoryLabel(category) {
         case 'healthcare': return 'Healthcare';
         case 'education': return 'Education';
         case 'shopping': return 'Shopping';
+        case 'udharr': return 'Udharr';
         case 'other': return 'Other';
         default: return category.charAt(0).toUpperCase() + category.slice(1);
     }

@@ -170,7 +170,7 @@ total_spent = Button(
     f1,
     text='Total Spent',
     font=f,
-    command=lambda:data.fetchRecord('select sum(ite)')
+    command=lambda:data.fetchRecord('select sum(item_price) from expense_record')
 )
 
 update_btn = Button(
